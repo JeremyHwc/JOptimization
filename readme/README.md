@@ -156,6 +156,87 @@
         严谨真实的启动时间（误区）
         
 ### 3-3 启动优化工具选择
+    traceview
+        特点：
+            .图形的形式展示执行时间、调用栈等
+            .信息全面，包含所有线程
+        使用方式：
+            .开始：Debug.starMethodTracing("");传入一个文件名,如：“App”，那么就会生成App.trace文件
+            .结束：Debug.stopMethodTracing();
+            .生成文件在sd卡：sdcard/Android/data/packagename/files
+        trace文件：
+            Wall Clock Time
+            Thread Time
+            水平方式是时间轴，纵向是方法调用顺序
+            Call Chart表：系统api颜色是橙色，程序代码是绿色，其他的是蓝色
+            FlameChart表：
+            Top Down表：从上往下就是详细的方法调用链，说明谁调用方法
+            Bottom Up表：一个函数的调用列表，就是表明方法被谁调用的
+        traceView代码影响：
+            .运行时开销严重，整体都会变慢，会抓取当前程序所有线程的执行函数。
+            .可能会带偏优化方向
+            .traceView和cpu profiler,traceview 是通过代码埋点，可以精确的确定哪一段代码的执行的详细信息，而cpu profiler是通过打点抓取堆栈信息，无法精确控制到具体某一段代码
+            
+            疑问：通过traceview代码控制出来的，在现在的版本中，没有看到有上面所说的几张表
+    systrace
+        参考文章：
+            https://www.jianshu.com/p/75aa88d1b575
+        简介：
+            允许在系统级别收集和检查设备上运行的所有进程的计时信息。它将来自android内核的数据（例如CPU调度程序，磁盘活动和应用程序线程）组合起来，生成HTML报告
+            结合Android 内核的数据，生成Html报告
+            API 18以上使用，推荐TraceCompat(向下兼容)
+        使用方式：
+            python systrace.py -t 10 [other-options] [categories]
+            官方文档：https://developer.android.com/studio/command-line/systrace#command_options
+            
+            命令：python D:\Jeremy\WorkEnv\Android\Sdk\platform-tools\systrace\systrace.py -b 32768 -t 5 -a com.tencent.joptimization -o performance.html schex gfx view wm am app
+        总结：
+            轻量级，开销小
+            直观反映cpu的利用率
+            cputime与walltime区别，我们优化的是cputime，walltime是代码执行时间，cputime是代码小号cpu的时间（重点指标）
+        疑问：为什么会出现walltime和cputime不一样？
+        答：比如锁冲突，比如A方法内部有一个锁，但是该锁被其他对象或方法持有，因此A方法会一直在等待，所以我们仅仅需要关心cpu的时间就可以。
+    注意：
+        两种方式互相补充
+        正确认识工具及不同场景选择合适的工具
+        
+### 3-5 优雅获取方法耗时讲解
+    1.常规方式
+        背景：需要知道启动阶段所有方法耗时
+        实现：手动埋点
+        具体实现：代码开始的地方long time = System.currentTimeMillis();代码结束的地方long const = System.currentTimeMillis()-time;
+                  或者SystemClock.currentThreadTimeMillis();这个是拿到的cpu真正执行的时间
+        缺点：侵入性强，工作量大
+        
+    2.AOP介绍
+        简介：Aspect Oriented Programming,面向切面变成
+              .针对同一类问题的统一处理
+              .无侵入添加代码
+        AspectJ使用：查看https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx
+        Join Points：程序运行时的执行点，可以作为切面的地方，
+                     .函数调用、执行
+                     .获取、设置变量
+                     .类初始化
+        PointCut：带条件的JoinPoints
+        Advice：一种Hook，要插入代码的位置，分类如下，
+                .Before：PointCut之前执行
+                .After：PointCut之后执行
+                .Around：PointCut之前，之后分别执行
+        语法简介：
+            @Before("execution(* android.app.Activity.on**(..))")
+            public void onActivityCalled(ProceedingJoinPoint joinPoint) throws Throwable{
+                ...
+            }
+            
+            Befor:Advice,具体插入位置
+            execution：处理JoinPoint的类型，call，execution
+            (* android.app.Activity.on**(..))：匹配规则
+            onActivityCalled:要插入的代码
+              
+    3.AOP实战
+    
+### 3-6 优雅获取方法耗时实操
+    
     
     
     

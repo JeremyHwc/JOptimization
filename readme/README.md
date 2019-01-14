@@ -302,6 +302,8 @@
             （1）代码Task化，启动逻辑抽象为Task
             （2）根据所有任务依赖关系排序生成一个又向无环图
             （3）多线程按照排序后的优先级依次执行
+        流程图：
+![](https://github.com/JeremyHwc/JOptimization/blob/master/imgs/%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96/%E5%90%AF%E5%8A%A8%E5%99%A8%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg)
     启动器实战
     
     

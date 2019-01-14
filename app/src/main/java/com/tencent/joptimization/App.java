@@ -5,6 +5,7 @@ import android.os.Trace;
 import android.util.Log;
 
 public class App extends Application {
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -27,5 +28,10 @@ public class App extends Application {
         }.run();
 //        Debug.stopMethodTracing();
         Trace.endSection();
+        init();
+    }
+
+    public void init(){
+
     }
 }

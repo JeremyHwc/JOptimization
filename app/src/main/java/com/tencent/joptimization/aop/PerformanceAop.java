@@ -20,7 +20,7 @@ public class PerformanceAop {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-        Log.i("TIME", name + " cost " + (System.currentTimeMillis() - time));
+        Log.i("PerformanceAop", name + " cost " + (System.currentTimeMillis() - time));
     }
 
     @Around("execution(* android.app.Activity.setContentView(..))")

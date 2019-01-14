@@ -228,7 +228,7 @@
                 ...
             }
             
-            Befor:Advice,具体插入位置
+            Before:Advice,具体插入位置
             execution：处理JoinPoint的类型，call，execution
             (* android.app.Activity.on**(..))：匹配规则
             onActivityCalled:要插入的代码
@@ -236,8 +236,73 @@
     3.AOP实战
     
 ### 3-6 优雅获取方法耗时实操
-    
-    
+    使用三方库
+        classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.0'
+        apply plugin: 'android-aspectjx'
+        implementation 'org.aspectj:aspectjrt:1.8.13'
+        implementation 'me.weishu:epic:0.3.6'
+```
+@Around("call(* com.tencent.joptimization.App.**(..))")
+    public void getTime(ProceedingJoinPoint joinPoint) {
+        Signature signature = joinPoint.getSignature();
+        String name = signature.toShortString();
+        long time = System.currentTimeMillis();
+        try {
+            joinPoint.proceed();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+        Log.i("TIME", name + " cost " + (System.currentTimeMillis() - time));
+    }
+```
+    AOP实现
+        .无侵入性
+        .修改方便
+    总结
+        优雅获取方法耗时的方法
+        AOP的理解及使用
+### 3-7 异步优化详解    
+    优化技巧
+        Theme切换：感觉快
+        （1）在drawable目录下创建,代码如下
+```
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:opacity="opaque">
+    <!-- The background color, preferably the same as your normal theme -->
+    <item android:drawable="@android:color/white"/>
+    <!-- Your product logo - 144dp color version of your app icon -->
+    <item>
+        <bitmap
+            android:src="@mipmap/splash"
+            android:gravity="fill"/>
+    </item>
+</layer-list>
+```
+        （2）在启动的首个activity中配置theme
+        （3）在首个activity中配置，在super.onCreate()方法前面配置setTheme(R.style.Theme_MyApp);
+    异步优化
+        核心思想：
+            子线程分担主线程任务，并行减少时间（注意：有些代码只能在主线程中执行，不能放在子线程中执行）
+        异步优化注意：
+            不符合异步要求
+            需要在某阶段完成
+            区分CPU密集型和IO密集型任务
+    总结
+        优化技巧和异步优化方案
+        异步优化的注意事项
+        
+### 3-8 异步初始化最优解 -启动器1
+    常规异步痛点
+        代码不优雅
+        场景不会处理（比如：依赖关系）
+        维护成本高
+    启动器介绍
+        核心思想：
+            充分利用CPU多核，自动梳理任务顺序
+        启动器流程：
+            （1）代码Task化，启动逻辑抽象为Task
+            （2）根据所有任务依赖关系排序生成一个又向无环图
+            （3）多线程按照排序后的优先级依次执行
+    启动器实战
     
     
     

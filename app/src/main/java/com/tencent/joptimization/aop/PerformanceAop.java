@@ -1,6 +1,6 @@
 package com.tencent.joptimization.aop;
 
-import android.util.Log;
+/*import android.util.Log;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -37,4 +37,4 @@ public class PerformanceAop {
     }
 
 
-}
+}*/

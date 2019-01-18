@@ -1,6 +1,6 @@
 package com.tencent.joptimization.aop;
 
-/*import android.util.Log;
+import android.util.Log;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -33,8 +33,8 @@ public class PerformanceAop {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-//        LogUtils.i(name + " cost " + (System.currentTimeMillis() - time));
+        Log.i("PerformanceAop",name + " cost " + (System.currentTimeMillis() - time));
     }
 
 
-}*/
+}

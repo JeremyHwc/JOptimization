@@ -4,6 +4,8 @@ import android.app.Application;
 import android.os.Trace;
 import android.util.Log;
 
+import com.github.anrwatchdog.ANRWatchDog;
+
 public class App extends Application {
 
     @Override
@@ -29,6 +31,8 @@ public class App extends Application {
 //        Debug.stopMethodTracing();
         Trace.endSection();
         init();
+
+        new ANRWatchDog().start();
     }
 
     public void init(){

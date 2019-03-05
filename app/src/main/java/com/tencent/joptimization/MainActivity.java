@@ -2,6 +2,8 @@ package com.tencent.joptimization;
 
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         synchronized (MainActivity.this){
             Log.e("BLOCKCANARY","卡顿测试");
         }
+
     }
     
 }

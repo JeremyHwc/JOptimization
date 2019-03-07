@@ -7,6 +7,8 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import java.util.concurrent.ArrayBlockingQueue;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         synchronized (MainActivity.this){
             Log.e("BLOCKCANARY","卡顿测试");
         }
+
 
     }
     

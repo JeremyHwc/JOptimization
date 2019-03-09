@@ -1,5 +1,6 @@
 package com.tencent.joptimization;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
@@ -9,14 +10,14 @@ import android.util.Log;
 
 import java.util.concurrent.ArrayBlockingQueue;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        new Thread(){
+        Debug.stopMethodTracing();
+        /*new Thread(){
             @Override
             public void run() {
                 super.run();
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         synchronized (MainActivity.this){
             Log.e("BLOCKCANARY","卡顿测试");
-        }
+        }*/
 
 
     }
